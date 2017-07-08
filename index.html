@@ -1,293 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta charset="UTF-8"/>
-    <title>Jimonitor</title>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta charset="UTF-8"/>
+        <title>Jimonitor</title>
 
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 
-    <script type="text/javascript" src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
-    <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript" src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
+        <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    <script type="text/javascript">
+    </head>
 
-        //TODO: js-file
-        //TODO: add to git(hub)
-        //TODO: include at bottom
-        //TODO: init global variables
+    <body>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+                     mdl-layout--no-drawer-button">
 
-    var minmax_config_form;
-    var min_temp;
-    var max_temp;
-    var save_button;
-    var sheetsApiLoaded = false;
+            <!-- Header section containing logo and menu -->
 
-    // var pageSplash;
-    // var pageSplash;
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title">We are Jim's monitors</span>
+                </div>
+            </header>
 
+            <main class="mdl-layout__content">
+                <div class="page-content">
+                    <!-- Your content goes here -->
 
-    // Load the Visualization API and the corechart package.
-    google.charts.load('current', {'packages': ['gauge', 'annotationchart']});
-    google.charts.setOnLoadCallback(drawSheetName);
-
-    gapi.load('client:auth2', loadSheetsApi);
-
-
-    function loadSheetsApi() {
-
-        gapi.client.init({
-            clientId: '1046614295942-2cvmq6ujplnh8668hrhu32u5kqpaui1k.apps.googleusercontent.com',
-            clientSecret: 'WTOnT3mSS25Av48kdwErJ2hJ',
-            apiKey: 'AIzaSyCtNi6nu1IF2wBcXg0rtIY0IxMLEIoLMz8',
-            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-            scope: 'https://www.googleapis.com/auth/spreadsheets'
-        }).then(function () {
-            //pageSplash = document.getElementById("page-splash");
-
-            gapi.auth2.getAuthInstance().isSignedIn.listen(loadConfigFromSheet);
-            loadConfigFromSheet(gapi.auth2.getAuthInstance().isSignedIn.get());
-
-            sheetsApiLoaded = true;
-        }, function (reason) {
-            sheetsApiLoaded = false;
-        });
-    }
-
-    function handleSignInClick(event) {
-        // Ideally the button should only show up after gapi.client.init finishes, so that this
-        // handler won't be called before OAuth is initialized.
-        gapi.auth2.getAuthInstance().signIn();
-    }
-
-
-    function loadConfigFromSheet(isSignedIn) {
-
-        if (!isSignedIn) {
-//            pageSplash.style.display = '';
-//            document.getElementsByTagName("header")[0].style.display = 'none';
-//            document.getElementsByTagName("main")[0].style.display = 'none';
-            return;
-        }
-
-//        pageSplash.style.display = 'none';
-
-        var request = {
-            spreadsheetId: '1uc6llAnOdh1vL6J6UeYSrod4NYAzGgxtsSXs3yvKfO0',
-            range: 'Sheet1!A1:D5'
-        };
-
-        gapi.client.sheets.spreadsheets.values.get(request).then( function(response) {
-            // TODO: Change code below to process the `response` object:
-            console.log(JSON.stringify(response, null, 2));
-        }, function(err) {
-            console.log(err);
-        });
-    }
-
-
-    function enableSaveButton(e) {
-        save_button.disabled = false;
-    }
-
-    function saveConfigToSheet(mintemp, maxtemp) {
-
-        var request = {
-            spreadsheetId: '1uc6llAnOdh1vL6J6UeYSrod4NYAzGgxtsSXs3yvKfO0',
-            range: 'Sheet2!B5:B6',
-            valueInputOption: 'USER_ENTERED',
-            values: [ [mintemp], [maxtemp]]
-        };
-
-        gapi.client.sheets.spreadsheets.values.update(request).then( function(response) {
-            console.log(response);
-        }, function(err) {
-            console.log(err);
-        });
-    }
-
-
-    function drawSheetName() {
-        minmax_config_form = document.getElementById("minmax_config_form");
-        min_temp = document.getElementById("mintemp");
-        max_temp = document.getElementById("maxtemp");
-        save_button = document.getElementById("save_button");
-
-        min_temp.onkeyup = enableSaveButton;
-        max_temp.onkeyup = enableSaveButton;
-
-        // Saves message on form submit.
-        minmax_config_form.onsubmit = function(e) {
-            e.preventDefault();
-            var mintemp = min_temp.value;
-            var maxtemp = max_temp.value;
-            if (mintemp && maxtemp) {
-                save_button.disabled = true;
-                saveConfigToSheet(mintemp, maxtemp);
-            }
-        };
-
-        //save_button.onclick = loadConfigFromSheet;
-
-        var queryString = encodeURIComponent('SELECT A, B ');
-        var query = new google.visualization.Query(
-            'https://docs.google.com/spreadsheets/d/1uc6llAnOdh1vL6J6UeYSrod4NYAzGgxtsSXs3yvKfO0/edit?sheet=Sheet2&headers=1&tq=' + queryString);
-        query.send(handleSampleDataQueryResponse);
-
-        var queryString2 = encodeURIComponent('SELECT A, E, D ');
-        var query2 = new google.visualization.Query(
-            'https://docs.google.com/spreadsheets/d/1uc6llAnOdh1vL6J6UeYSrod4NYAzGgxtsSXs3yvKfO0/edit?sheet=Sheet1&headers=1&tq=' + queryString2);
-        query2.send(handleSampleDataQueryResponse2);
-    }
-
-    function handleSampleDataQueryResponse(response) {
-        if (response.isError()) {
-            alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-            return;
-        }
-
-        var data = response.getDataTable();
-
-        var min_temp = data.getValue(3, 1);
-        var max_temp = data.getValue(4, 1);
-
-
-        var temp_options = {
-            width: 200, height: 120,
-            greenFrom: min_temp, greenTo: max_temp,
-            yellowFrom: max_temp, yellowTo: 100,
-            redFrom: 0, redTo: min_temp,
-            minorTicks: 5
-        };
-        var bat_options = {
-            width: 200, height: 120,
-            greenFrom: 3.5, greenTo: 5,
-            yellowFrom: 3.2, yellowTo: 3.5,
-            redFrom: 0, redTo: 3.2,
-            minorTicks: 5,
-            min: 0,
-            max: 5
-        };
-        var db_options = {
-            width: 200, height: 120,
-            greenFrom: -80, greenTo: 0,
-            yellowFrom: -100, yellowTo: -80,
-            redFrom: -130, redTo: -100,
-            minorTicks: 5,
-            min: -150,
-            max: 0
-        };
-
-        var view = new google.visualization.DataView(data);
-
-        view.setRows([0]);
-        var temp_chart = new google.visualization.Gauge(document.getElementById('temp_div'));
-        temp_chart.draw(view, temp_options);
-
-        view.setRows([1]);
-        var bat_chart = new google.visualization.Gauge(document.getElementById('bat_div'));
-        bat_chart.draw(view, bat_options);
-
-        view.setRows([2]);
-        var db_chart = new google.visualization.Gauge(document.getElementById('db_div'));
-        db_chart.draw(view, db_options);
-
-        document.getElementById("mintemp").value = min_temp;
-        document.getElementById("maxtemp").value = max_temp;
-    }
-
-    function handleSampleDataQueryResponse2(response) {
-        if (response.isError()) {
-            alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-            return;
-        }
-
-        var options = {
-            displayAnnotations: false,
-            scaleColumns: [1, 2]
-
-        };
-
-        var data = response.getDataTable();
-
-        var chart = new google.visualization.AnnotationChart(document.getElementById('annotation_div'));
-        chart.draw(data, options);
-    }
-
-</script>
-</head>
-
-<body>
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
-             mdl-layout--no-drawer-button">
-
-    <!-- Header section containing logo and menu -->
-
-        <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
-                <!-- Title -->
-                <span class="mdl-layout-title">We are Jim's monitors</span>
-            </div>
-        </header>
-
-        <main class="mdl-layout__content">
-            <div class="page-content">
-                <!-- Your content goes here -->
-
-                <div class="mdl-grid">
-                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--6-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-                        <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-                            <h2 class="mdl-card__title-text">Gauges</h2>
-                        </div>
-                        <div class="mdl-card__supporting-text mdl-card--expand">
-                            <div class="mdl-grid ">
-                                <div class="mdl-cell mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--2-col-phone" id="temp_div">Temp gauge</div>
-                                <div class="mdl-cell mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--2-col-phone" id="bat_div">Bat gauge</div>
-                                <div class="mdl-cell mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--2-col-phone" id="db_div">db gauge</div>
+                    <div class="mdl-grid">
+                        <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--6-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+                            <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
+                                <h2 class="mdl-card__title-text">Gauges</h2>
+                            </div>
+                            <div class="mdl-card__supporting-text mdl-card--expand">
+                                <div class="mdl-grid ">
+                                    <div class="mdl-cell mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--2-col-phone"
+                                         id="temp_div">Temp gauge
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--2-col-phone"
+                                         id="bat_div">Bat gauge
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--2-col-phone"
+                                         id="db_div">db gauge
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="mdl-card mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+                            <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
+                                <h4 class="mdl-card__title-text">Update Min/Max Limits</h4>
+                            </div>
+
+                            <div class="mdl-card__supporting-text">
+
+                                <form id="minmax_config_form">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" pattern="[0-9.]*" id="mintemp"
+                                               value="1"/>
+                                        <label class="mdl-textfield__label" for="mintemp">Minimum temperature...</label>
+                                        <span class="mdl-textfield__error">Numeric input only</span>
+                                    </div>
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" pattern="[0-9.]*" id="maxtemp"
+                                               value="2">
+                                        <label class="mdl-textfield__label" for="maxtemp">Maximum temperature...</label>
+                                        <span class="mdl-textfield__error">Numeric input only</span>
+                                    </div>
+                                    <br/>
+                                    <button type="submit"
+                                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                            id="save_button" disabled>Save
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="mdl-card mdl-cell mdl-cell--10-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp ">
+                            <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
+                                <h4 class="mdl-card__title-text">Time series</h4>
+                            </div>
+                            <div class="mdl-card__supporting-text ">
+                                <div id="annotation_div" style="height: 220px; ">Temp chart</div>
+                            </div>
+                        </div>
+
                     </div>
-
-                    <div class="mdl-card mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
-                        <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-                            <h4 class="mdl-card__title-text">Update Min/Max Limits</h4>
-                        </div>
-
-                        <div class="mdl-card__supporting-text">
-
-                            <form id="minmax_config_form">
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="text" pattern="[0-9.]*" id="mintemp" value="1"/>
-                                            <label class="mdl-textfield__label" for="mintemp">Minimum temperature...</label>
-                                            <span class="mdl-textfield__error">Numeric input only</span>
-                                        </div>
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <input class="mdl-textfield__input" type="text" pattern="[0-9.]*" id="maxtemp" value="2">
-                                            <label class="mdl-textfield__label" for="maxtemp">Maximum temperature...</label>
-                                            <span class="mdl-textfield__error">Numeric input only</span>
-                                        </div>
-                                <br/>
-                                        <button type="submit"
-                                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="save_button" disabled>Save
-                                        </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="mdl-card mdl-cell mdl-cell--10-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp ">
-                        <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-                            <h4 class="mdl-card__title-text">Time series</h4>
-                        </div>
-                        <div class="mdl-card__supporting-text " >
-                            <div id="annotation_div" style="height: 220px; ">Temp chart</div>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
-        </main>
-    </div>
-</body>
+            </main>
+        </div>
+    </body>
+
+    <script type="text/javascript" src="main.js"></script>
 </html>
