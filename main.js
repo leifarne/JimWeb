@@ -14,7 +14,7 @@ var annotation_div = document.getElementById('annotation_div');
 min_temp.onkeyup = enableSaveButton;
 max_temp.onkeyup = enableSaveButton;
 
-// Saves message on form submit.
+// Saves message on form submit..
 minmax_config_form.onsubmit = function(e) {
     e.preventDefault();
     var mintemp = min_temp.value;
