@@ -43,9 +43,9 @@ gapi.load('client:auth2', loadSheetsApi);
 function loadSheetsApi() {
 
     gapi.client.init({
-        clientId: '1046614295942-2cvmq6ujplnh8668hrhu32u5kqpaui1k.apps.googleusercontent.com',
-        clientSecret: 'WTOnT3mSS25Av48kdwErJ2hJ',
-        apiKey: 'AIzaSyCtNi6nu1IF2wBcXg0rtIY0IxMLEIoLMz8',
+        clientId: '141981421458-on8vtobj71q5k9ou6fg2k2unjsiq4jm7.apps.googleusercontent.com',
+        clientSecret: 'SMCQb54O8HgZi-Lh47qiYDko',
+        //apiKey: 'AIzaSyCtNi6nu1IF2wBcXg0rtIY0IxMLEIoLMz8',
         discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
         scope: 'https://www.googleapis.com/auth/spreadsheets'
     }).then(function () {
