@@ -190,7 +190,7 @@ function drawAnnotationChart() {
     annotationChartWrapper.setChartType('AnnotationChart');
     annotationChartWrapper.setContainerId('annotation_div')
     annotationChartWrapper.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1uc6llAnOdh1vL6J6UeYSrod4NYAzGgxtsSXs3yvKfO0/edit?sheet=Sheet1&headers=1');
-    annotationChartWrapper.setQuery('SELECT A, E, D LIMIT 1000');
+    annotationChartWrapper.setQuery('SELECT A, E WHERE datediff(now(), A) < 7');
     annotationChartWrapper.setOptions(options);
     annotationChartWrapper.setRefreshInterval(10);
     annotationChartWrapper.draw();
