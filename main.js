@@ -60,7 +60,7 @@ function drawTemperatureChart() {
     google.visualization.drawChart({
         "containerId": "temperature_chart_div",
         "dataSourceUrl": "https://docs.google.com/spreadsheets/d/1uc6llAnOdh1vL6J6UeYSrod4NYAzGgxtsSXs3yvKfO0/edit?sheet=Sheet1&headers=1",
-        "query":"SELECT A, E WHERE datediff(now(), A) < 7",
+        "query":"SELECT A, E WHERE datediff(now(), A) < 90",
         "refreshInterval": 5,
         "chartType": "AnnotationChart",
         "options": {
