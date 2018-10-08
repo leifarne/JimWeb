@@ -3,7 +3,7 @@
 <head>
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
 </head>
 
@@ -20,7 +20,13 @@
         </v-toolbar>
 
         <v-content>
-          <div id="temperature_chart_div" >Temp chart</div>
+          <v-container grid-list-xs >
+            <v-layout column  >
+              <v-flex xl12 >
+                <div id="temperature_chart_div" >Temp chart</div>
+              </v-flex>
+            </v-layout>
+          </v-container>
         </v-content>
 
       </v-app>
